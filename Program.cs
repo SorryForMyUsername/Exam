@@ -4,13 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace __24
+namespace Билет_24
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
             TriangleFunc triangleSquareFunc = S;
+
+            while (true)
+            {
+                Console.WriteLine("Выберите действие:\n" +
+                    "1. Вычислить площадь треугольника\n" +
+                    "2. Выход\n");
+
+                int choice = Console.ReadKey(true).KeyChar - '0';
+
+                switch (choice)
+                {
+                    case 1: IOTriangleSquare(triangleSquareFunc); break;
+                    case 2: return;
+                }
+                Console.WriteLine();
+            }
         }
 
         delegate double TriangleFunc(double a, double b, double c);
@@ -23,30 +39,45 @@ namespace __24
 
         static bool IsTriangle(double a, double b, double c)
         {
-            if(a + b > c && a + c > b && b + c > a)
+            if (a + b > c && a + c > b && b + c > a)
             {
                 return true;
             }
             return false;
         }
 
-        static void IOTriangleSquare()
+        static void IOTriangleSquare(TriangleFunc squareFunc)
         {
+            while (true)
+            {
+                double a = InputDouble("Первая сторона: ");
+                double b = InputDouble("Вторая сторона: ");
+                double c = InputDouble("Третья сторона: ");
 
+                if(IsTriangle(a, b, c))
+                {
+                    Console.WriteLine($"\nПлощадь треугольника: {squareFunc.Invoke(a, b, c):f2}");
+                    break;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Треугольника с такими сторонами не существует!");
+                Console.ResetColor();
+            }
         }
 
-        public static int Int(string message, int min = Int32.MinValue)
+        public static double InputDouble(string message, double min = double.MinValue)
         {
             Console.Write(message);
-            int price;
-            while (!int.TryParse(Console.ReadLine(), out price) || price < min)
+            double input;
+            while (!double.TryParse(Console.ReadLine(), out input) || input <= min)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Неправильный ввод!");
                 Console.ResetColor();
                 Console.Write(message);
             }
-            return price;
+            return input;
         }
     }
 }
